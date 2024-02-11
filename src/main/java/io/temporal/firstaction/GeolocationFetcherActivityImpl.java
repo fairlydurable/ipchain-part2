@@ -87,9 +87,9 @@ public class GeolocationFetcherActivityImpl implements GeolocationFetcherActivit
   private boolean isValidIPAddress(String ipAddress) {
     // Regular expression to match IPv4 address format
     String ipRegex = "^([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\." +
-    "([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\." +
-    "([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\." +
-    "([01]?\\d\\d?|2[0-4]\\d|25[0-5])$";
+      "([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\." +
+      "([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\." +
+      "([01]?\\d\\d?|2[0-4]\\d|25[0-5])$";
     return Pattern.matches(ipRegex, ipAddress);
   }
   
