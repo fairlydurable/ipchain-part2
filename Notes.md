@@ -28,12 +28,11 @@ The following symbolic links were built in the root folder for this project.
     in the convenience 'sourceDir'. It will house all your source files for
     this package. If the package is 'io.temporal.myfirstproject', the directory
     is named 'myfirstproject'.
- 4. **Create a (dangerous) link**.
-    Create a way to hop back to the root of your project.
-    'ln -s ../../../../../.. root'
-    This assumes your folder structure is:
-    project-folder/src/main/java/io/temporal/package_name
-    CAUTION: You must remove this link before compiling.
+ 4. **Create a hop**.
+    Create a way to hop back to the root of your project like: 
+    'alias hop pushd ../../../../../..'
+    Do not use symbolic links. They will create infinite loops with
+    Maven compilation.
  5. **Create test infrastructure**.
     Optionally repeat steps 4 and 5 for tests:
     project-folder/src/test/java/io/temporal

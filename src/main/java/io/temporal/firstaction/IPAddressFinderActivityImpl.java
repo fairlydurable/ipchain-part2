@@ -25,7 +25,7 @@ public class IPAddressFinderActivityImpl implements IPAddressFinderActivity {
     try {
       // Call getPublicIPAddress and print the result
       String ipAddress = ipFinder.getPublicIPAddress();
-      System.out.println("Public IP Address: " + ipAddress);
+      System.out.println(ipAddress);
     } catch (IOException exception) {
       System.err.println("Error retrieving IP address: " + exception.getMessage());
     }

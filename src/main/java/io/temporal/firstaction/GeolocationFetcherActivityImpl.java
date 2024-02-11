@@ -29,10 +29,16 @@ public class GeolocationFetcherActivityImpl implements GeolocationFetcherActivit
    *
    * @param ipAddress the IP address string for the search.
    */
-  public static void main(String ipAddress) {
+  public static void main(String[] args) {
     GeolocationFetcherActivityImpl geoFetcher = new GeolocationFetcherActivityImpl();
     try {
+      // Check for argument
+      if (args.length != 1) {
+        throw new InvalidStatusException("Expecting 1 argument. Got " + Integer.toString(args.length));
+      }
+      
       // Test for IPv4 structure/conformance
+      String ipAddress = args[0];
       if (!geoFetcher.isValidIPAddress(ipAddress)) {
         throw new InvalidStatusException("IP address is not valid IPv4.");
       }
@@ -41,27 +47,32 @@ public class GeolocationFetcherActivityImpl implements GeolocationFetcherActivit
       String[] geolocationArray = geoFetcher.fetchApproximateGeolocation(ipAddress);
       System.out.print(geolocationArray[0] + " " +
                        geolocationArray[1] + "\n");
-    } catch (IOException exception) {
+    } catch (Exception exception) {
       System.err.println("Error retrieving approximate geolocation: " + exception.getMessage());
     }
   }
   
   /**
-   * Fetch the approximate geolocation data of an IP address.
+   * Return the approximate geolocation data of an IP address.
    *
    * @param ipAddress the IP address for which geolocation data is to be fetched
-   * @return a String array containing the longitude and latitude as strings
+   * @return a String array containing the latitude and longitude as strings
    * @throws IOException if an I/O error occurs while fetching the geolocation data
+   * @apiNote EPSG:4326 specifies that latitude comes first, before longitude. Despite that
+   * many computer systems and software still use longitude and then latitude ordering.
+   * PostGIS and WFS 1.0 use long/lat. WFS 1.3 and GeoTools use lat/long.
+   * Some tooling allows you to swap the expected order with overrides.
+   * @see <a href="https://docs.geotools.org/latest/userguide/library/referencing/order.html">Axis Order</a> from the OSGeo project.
    */
-  public St  public String[] fetchApproximateGeolocation(String ipAddress) throws IOException {
+  public String[] fetchApproximateGeolocation(String ipAddress) throws IOException {
     try {
       JSONObject geolocationData = fetchGeolocationData(ipAddress);
       return new String[]{
-        geolocationData.getDouble("longitude"),
-        geolocationData.getDouble("latitude")
-      }
-    } catch IOException exception {
-      throw exception
+        Double.toString(geolocationData.getDouble("latitude")),
+        Double.toString(geolocationData.getDouble("longitude"))
+      };
+    } catch (IOException exception) {
+      throw exception;
     }
   }
   
